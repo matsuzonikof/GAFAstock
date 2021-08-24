@@ -1,9 +1,14 @@
+#source venv/bin/activate 仮想環境をたちあげてstreamlit
 import pandas as pd
 import yfinance as yf
-import altair as alt
+import altair as alt  #streamlitと相性のよいグラフ描画
 import streamlit as st
+#import matplotlib.pylot as plt
+#matplotlib inline
+st.title("Matsuzo's 米国株価可視化アプリ")
 
-st.title('米国株価可視化アプリ')
+img=Image.open('/Users/matsukurayoshinori/Downloads/matsuzo_mintia.png')
+st.image(img,caption='matsuzo_mintia',use_column_width=True)
 
 st.sidebar.write("""
 # GAFA株価
@@ -20,12 +25,12 @@ st.write(f"""
 ### 過去 **{days}日間** のGAFA株価
 """)
 
-@st.cache
+@st.cache #キャッシュクリアで動き軽く
 def get_data(days, tickers):
     df = pd.DataFrame()
     for company in tickers.keys():
         tkr = yf.Ticker(tickers[company])
-        hist = tkr.history(period=f'{days}d')
+        hist = tkr.history(period=f'{days}d') #aapl.history(period='50D')
         hist.index = hist.index.strftime('%d %B %Y')
         hist = hist[['Close']]
         hist.columns = [company]
@@ -61,15 +66,15 @@ try:
     if not companies:
         st.error('少なくとも一社は選んでください。')
     else:
-        data = df.loc[companies]
+        data = df.loc[companies] #ilocだと0,1,2・・・で指定
         st.write("### 株価 (USD)", data.sort_index())
         data = data.T.reset_index()
-        data = pd.melt(data, id_vars=['Date']).rename(
+        data = pd.melt(data, id_vars=['Date']).rename(  #生データに戻す
             columns={'value': 'Stock Prices(USD)'}
         )
         chart = (
             alt.Chart(data)
-            .mark_line(opacity=0.8, clip=True)
+            .mark_line(opacity=0.8, clip=True) #clipははみでたグラフを切る
             .encode(
                 x="Date:T",
                 y=alt.Y("Stock Prices(USD):Q", stack=None, scale=alt.Scale(domain=[ymin, ymax])),
