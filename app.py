@@ -3,11 +3,12 @@ import pandas as pd
 import yfinance as yf
 import altair as alt  #streamlitと相性のよいグラフ描画
 import streamlit as st
+from PIL import Image
 #import matplotlib.pylot as plt
 #matplotlib inline
 st.title("Matsuzo's 米国株価可視化アプリ")
 
-img=Image.open('/Users/matsukurayoshinori/Downloads/matsuzo_mintia.png')
+img=Image.open('matsuzo_mintia.png')
 st.image(img,caption='matsuzo_mintia',use_column_width=True)
 
 st.sidebar.write("""
