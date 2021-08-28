@@ -31,7 +31,7 @@ def get_data(days, tickers):
     df = pd.DataFrame()
     for company in tickers.keys():
         tkr = yf.Ticker(tickers[company])
-        hist = tkr.history(period=f'{days}d') #aapl.history(period='50D')
+        hist = tkr.history(period=f'{days}d') #aapl.history(period='50d')
         hist.index = hist.index.strftime('%d %B %Y')
         hist = hist[['Close']]
         hist.columns = [company]
@@ -55,7 +55,8 @@ try:
         'google': 'GOOGL',
         'microsoft': 'MSFT',
         'netflix': 'NFLX',
-        'amazon': 'AMZN'
+        'amazon': 'AMZN',
+        'tesra': 'TSLA'
     }
     df = get_data(days, tickers)
     companies = st.multiselect(
